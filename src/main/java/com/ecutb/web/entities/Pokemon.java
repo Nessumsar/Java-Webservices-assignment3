@@ -18,8 +18,8 @@ public class Pokemon {
     private String id;
     @JsonProperty("name")
     private String name;
-    @JsonProperty("type")
-    private List<Object> type;
+    @JsonProperty("types")
+    private List<Object> types;
     @JsonProperty("height")
     private int height;
     @JsonProperty("weight")
