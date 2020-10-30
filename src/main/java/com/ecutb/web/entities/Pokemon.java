@@ -7,13 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Pokemon {
+public class Pokemon implements Serializable {
+    private static final long serialVersionUID = 96348939829L;
+
     @Id
     private String id;
     @JsonProperty("name")
