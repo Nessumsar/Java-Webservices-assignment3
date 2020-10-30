@@ -8,6 +8,7 @@ public class PokeApiApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PokeApiApplication.class, args);
+		System.out.println("hej");
 	}
 
 }
