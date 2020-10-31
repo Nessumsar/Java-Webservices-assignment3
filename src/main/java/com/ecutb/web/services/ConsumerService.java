@@ -37,4 +37,16 @@ public class ConsumerService {
                     String.format("Could not find pokemon with name in pokeapi %s", name));
         }
     }
+
+    public Optional<Pokemon> findById(String id){
+        var url = baseUrl + "pokemon/" + id;
+        try{
+            Optional<Pokemon> pokemon = Optional.ofNullable(restTemplate.getForObject(url, Pokemon.class));
+            return pokemon;
+        }catch(Exception e){
+            log.warn(e.toString());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("Could not find pokemon with id in pokeapi %s", id));
+        }
+    }
 }
