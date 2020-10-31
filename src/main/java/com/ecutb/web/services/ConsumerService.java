@@ -4,8 +4,10 @@ import com.ecutb.web.entities.Pokemon;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -25,8 +27,14 @@ public class ConsumerService {
     }
 
     public Optional<Pokemon> findByName(String name){
-        log.warn(name);
         var url = baseUrl + "pokemon/" + name;
-        return Optional.ofNullable(restTemplate.getForObject(url, Pokemon.class));
+        try{
+            Optional<Pokemon> pokemon = Optional.ofNullable(restTemplate.getForObject(url, Pokemon.class));
+            return pokemon;
+        }catch(Exception e){
+            log.warn(e.toString());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    String.format("Could not find pokemon with name in pokeapi %s", name));
+        }
     }
 }
