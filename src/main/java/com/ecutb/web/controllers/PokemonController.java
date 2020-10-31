@@ -4,9 +4,7 @@ import com.ecutb.web.entities.Pokemon;
 import com.ecutb.web.services.PokemonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/pokemon")
@@ -14,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class PokemonController {
     private final PokemonService pokemonService;
 
-    @GetMapping
-    public ResponseEntity<Pokemon> findDitto(){
-        return ResponseEntity.ok(pokemonService.dittotest());
+    @GetMapping("/{name}")
+    public ResponseEntity<Pokemon> findByName(@PathVariable(value = "name") String name){
+        return ResponseEntity.ok(pokemonService.findByName(name));
     }
 }
