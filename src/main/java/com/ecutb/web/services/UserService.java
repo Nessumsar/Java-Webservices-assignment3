@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -18,35 +19,33 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public ResponseEntity<List<User>> findAll(){
-        return ResponseEntity.ok(userRepository.findAll());
+    public List<User> findAll(){
+        return userRepository.findAll();
     }
 
-    public ResponseEntity<User> findById(String username){
+    public User findById(String username){
         var found = userRepository.findById(username);
-
-        if (found.isPresent()){
-           return ResponseEntity.ok(found.get());
-        }else{
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    String.format("Could not find any users by username %s", username));
-        }
-
+        return found.orElse(null);
     }
 
-    public ResponseEntity<User> save(User user){
-        return ResponseEntity.ok(userRepository.save(user));
+    public User save(User user){
+        return userRepository.save(user);
     }
 
-    public ResponseEntity<User> update(User user){
+    public User update(User user){
         var found = findById(user.getUsername());
-        if (found.getStatusCode().is2xxSuccessful()){
-            return ResponseEntity.ok(userRepository.save(user));
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                String.format("Could not update user %s", user.getUsername()));
+        if (found.isPresent){
+            return userRepository.save(user);
+        }else return null;
+    }
+
+    public boolean delete(String username){
+        var found = userRepository.findById(username);
+        found.ifPresent(user -> userRepository.delete(user));
+        return !userRepository.findById(username).isPresent();
     }
 
 
 
 }
+
