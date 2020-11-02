@@ -4,11 +4,17 @@ import com.ecutb.web.entities.Pokemon;
 import com.ecutb.web.repositories.PokemonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.support.PagedListHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -23,9 +29,19 @@ public class PokemonService {
     private final PokemonRepository pokemonRepository;
 
     @GetMapping
-    public List<Pokemon> findAll(String name, Boolean sortByHeight, Boolean sortByWeight, Boolean sortById){
+    public List<Pokemon> findAll(String name,
+                                 Boolean sortByHeight,
+                                 Boolean sortByWeight,
+                                 Boolean sortById,
+                                 Integer page){
+        if(page == null){
+            page = 0;
+        }
+
         List<Pokemon> pokemons = pokemonRepository.findAll();
+
         if(name != null){
+            log.info("Finding pokemons with matching naems");
             pokemons = pokemons.stream()
                     .filter(p -> p.getName()
                             .toLowerCase()
@@ -33,11 +49,13 @@ public class PokemonService {
                     .collect(Collectors.toList());
         }
         if(sortByHeight != null){
+            log.info("Sorting by height...");
             pokemons = pokemons.stream()
                     .sorted(Comparator.comparing(Pokemon::getHeight))
                     .collect(Collectors.toList());
         }
         if(sortByWeight != null){
+            log.info("Sorting by weight...");
             pokemons = pokemons.stream()
                     .sorted(Comparator.comparingInt(Pokemon::getWeight))
                     .collect(Collectors.toList());
@@ -48,6 +66,14 @@ public class PokemonService {
                     .sorted(Comparator.comparingInt(o -> Integer.parseInt(o.getId())))
                     .collect(Collectors.toList());
         }
+
+
+        PagedListHolder<Pokemon> pokemonPage = new PagedListHolder<>(pokemons);
+        pokemonPage.setPageSize(100);
+        pokemonPage.setPage(page);
+
+        pokemons = pokemonPage.getPageList();
+
         return pokemons;
     }
 

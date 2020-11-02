@@ -3,6 +3,7 @@ package com.ecutb.web.controllers;
 import com.ecutb.web.entities.Pokemon;
 import com.ecutb.web.services.PokemonService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +19,9 @@ public class PokemonController {
     public ResponseEntity<List<Pokemon>> findAll(@RequestParam(required = false) String name,
                                                  @RequestParam(required = false) Boolean sortByHeight,
                                                  @RequestParam(required = false) Boolean sortByWeight,
-                                                 @RequestParam(required = false) Boolean sortById){
-        return ResponseEntity.ok(pokemonService.findAll(name,sortByHeight, sortByWeight, sortById));
+                                                 @RequestParam(required = false) Boolean sortById,
+                                                 @RequestParam(required = false) Integer page){
+        return ResponseEntity.ok(pokemonService.findAll(name,sortByHeight, sortByWeight, sortById, page));
     }
 
     @GetMapping("/{name}")
