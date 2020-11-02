@@ -14,7 +14,7 @@ import java.util.List;
 public class PokemonController {
     private final PokemonService pokemonService;
 
-    @GetMapping
+    @GetMapping("/open")
     public ResponseEntity<List<Pokemon>> findAll(@RequestParam(required = false) String name,
                                                  @RequestParam(required = false) Boolean sortByHeight,
                                                  @RequestParam(required = false) Boolean sortByWeight,
