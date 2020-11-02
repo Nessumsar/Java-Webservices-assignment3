@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 
 @RestController
@@ -37,9 +36,9 @@ public class UserController {
         }else return ResponseEntity.ok(result);
     }
 
-    @PostMapping
+    @PostMapping("/new")
     public ResponseEntity<User> saveUser(@RequestBody User user){
-        ResponseEntity.ok(userService.save(user));
+       return ResponseEntity.ok(userService.save(user));
     }
 
     @PutMapping("/update")
@@ -58,3 +57,7 @@ public class UserController {
         else throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                 String.format("Could not delete user %s", username));
     }
+
+
+
+}

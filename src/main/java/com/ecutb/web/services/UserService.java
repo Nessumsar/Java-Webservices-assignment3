@@ -2,14 +2,9 @@ package com.ecutb.web.services;
 
 import com.ecutb.web.entities.User;
 import com.ecutb.web.repositories.UserRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.List;
 
@@ -34,7 +29,7 @@ public class UserService {
 
     public User update(User user){
         var found = findById(user.getUsername());
-        if (found.isPresent){
+        if (found != null) {
             return userRepository.save(user);
         }else return null;
     }
@@ -42,7 +37,7 @@ public class UserService {
     public boolean delete(String username){
         var found = userRepository.findById(username);
         found.ifPresent(user -> userRepository.delete(user));
-        return !userRepository.findById(username).isPresent();
+        return userRepository.findById(username).isEmpty();
     }
 
 
