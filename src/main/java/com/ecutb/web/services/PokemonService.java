@@ -41,7 +41,7 @@ public class PokemonService {
         List<Pokemon> pokemons = pokemonRepository.findAll();
 
         if(name != null){
-            log.info("Finding pokemons with matching naems");
+            log.info("Finding pokemons with matching names");
             pokemons = pokemons.stream()
                     .filter(p -> p.getName()
                             .toLowerCase()
